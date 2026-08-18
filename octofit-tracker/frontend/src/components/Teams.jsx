@@ -7,6 +7,11 @@ const getApiBaseUrl = () => {
     : 'http://localhost:8000';
 };
 
+const getTeamsUrl = () =>
+  import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/teams/`
+    : 'http://localhost:8000/api/teams/';
+
 const normalizeRecords = (payload) => {
   if (Array.isArray(payload)) return payload;
   if (!payload || typeof payload !== 'object') return [];
@@ -24,7 +29,7 @@ export default function Teams() {
   useEffect(() => {
     const loadTeams = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/api/teams/`);
+        const response = await fetch(getTeamsUrl());
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }

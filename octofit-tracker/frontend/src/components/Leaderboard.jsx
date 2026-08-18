@@ -7,6 +7,11 @@ const getApiBaseUrl = () => {
     : 'http://localhost:8000';
 };
 
+const getLeaderboardUrl = () =>
+  import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/leaderboard/`
+    : 'http://localhost:8000/api/leaderboard/';
+
 const normalizeRecords = (payload) => {
   if (Array.isArray(payload)) return payload;
   if (!payload || typeof payload !== 'object') return [];
@@ -24,7 +29,7 @@ export default function Leaderboard() {
   useEffect(() => {
     const loadLeaderboard = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/api/leaderboard/`);
+        const response = await fetch(getLeaderboardUrl());
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }

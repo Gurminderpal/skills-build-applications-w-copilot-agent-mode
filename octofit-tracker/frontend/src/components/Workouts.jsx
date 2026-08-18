@@ -7,6 +7,11 @@ const getApiBaseUrl = () => {
     : 'http://localhost:8000';
 };
 
+const getWorkoutsUrl = () =>
+  import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/workouts/`
+    : 'http://localhost:8000/api/workouts/';
+
 const normalizeRecords = (payload) => {
   if (Array.isArray(payload)) return payload;
   if (!payload || typeof payload !== 'object') return [];
@@ -24,7 +29,7 @@ export default function Workouts() {
   useEffect(() => {
     const loadWorkouts = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/api/workouts/`);
+        const response = await fetch(getWorkoutsUrl());
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }

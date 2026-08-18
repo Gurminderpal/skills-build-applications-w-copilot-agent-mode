@@ -7,6 +7,11 @@ const getApiBaseUrl = () => {
     : 'http://localhost:8000';
 };
 
+const getUsersUrl = () =>
+  import.meta.env.VITE_CODESPACE_NAME
+    ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`
+    : 'http://localhost:8000/api/users/';
+
 const normalizeRecords = (payload) => {
   if (Array.isArray(payload)) return payload;
   if (!payload || typeof payload !== 'object') return [];
@@ -24,7 +29,7 @@ export default function Users() {
   useEffect(() => {
     const loadUsers = async () => {
       try {
-        const response = await fetch(`${getApiBaseUrl()}/api/users/`);
+        const response = await fetch(getUsersUrl());
         if (!response.ok) {
           throw new Error(`Request failed with status ${response.status}`);
         }
